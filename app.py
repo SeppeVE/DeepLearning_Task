@@ -12,9 +12,9 @@ from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 
 # Function to create and compile the model
 def create_model():
-    NUM_CLASSES = 5 # We hebben natuurlijk 5 classes
-    IMG_SIZE = 128 # De foto's zijn 128 op 128 pixels
-    HEIGHT_FACTOR = 0.2 # Maximale afwijking van de data augmentatie
+    NUM_CLASSES = 5  # We hebben natuurlijk 5 classes
+    IMG_SIZE = 128  # De foto's zijn 128 op 128 pixels
+    HEIGHT_FACTOR = 0.2  # Maximale afwijking van de data augmentatie
     WIDTH_FACTOR = 0.2
     model = tf.keras.Sequential([
         layers.Resizing(IMG_SIZE, IMG_SIZE),
@@ -99,52 +99,52 @@ def main():
     # ...
     categories = ['Atomium', 'Coloseum', 'Eiffel Tower', 'Statue of Liberty', 'Sydney Opera House']
 
-    
+    # Add a button to trigger model training
+    train_button = st.button("Train Model")
 
-    train_val_datagen = ImageDataGenerator(
-            validation_split=0.2,     # De training data wordt voor 80% gebruikt om te trainen en 20% om te valideren.
-            rescale=1./255,           # De pixels van de foto's worden omgezet van een waarde tussen 0 en 255 naar een waarde tussen 0 en 1. Dit is omdat de neuronen die de pixel waarden bevatten enkel getallen tussen 0 en 1 kunnen gebruiken.
-            shear_range=0.2,          # Shear wordt toegepast met een afwijking tussen de -20% en 20% van de originele afbeelding.
-            zoom_range=0.2,           # Ook hier geldt het -20% tot 20% principe maar dan op het in- of uitzoomen van de afbeelding.
-            horizontal_flip=True,     # De foto's worden ook nog eens horizontaal geflipt.
+    if train_button:
+        train_val_datagen = ImageDataGenerator(
+            validation_split=0.2,
+            rescale=1./255,
+            shear_range=0.2,
+            zoom_range=0.2,
+            horizontal_flip=True,
         )
 
-    test_datagen = ImageDataGenerator(rescale = 1./255)
+        test_datagen = ImageDataGenerator(rescale=1./255)
 
-    # Training data word gemaakt uit de training_set directory. Hier wordt dan de eerder ingestelde data augmentatie op worden toegepast.
-    training_set = train_val_datagen.flow_from_directory(
-        'datasets/training_set',     # Verwijzing naar de folder met de data.
-        subset='training',       # We willen hier de training subset gebruiken. Dit is de 90% die eerder gesplit werd.
-        target_size=(128, 128),    # De foto's worden geresized naar 128 bij 128 pixels
-        batch_size=32,           # Per Epoch gaan we om de 32 foto's even evalueren en de nodige parameters aanpassen.
-        class_mode='categorical' # We willen uiteindelijk foto's die binnen een bepaalde categorie vallen. Dus moet hier niet binary zoals met 2 outputs maar categorical voor 5 outputs.
-    )
+        training_set = train_val_datagen.flow_from_directory(
+            'datasets/training_set',
+            subset='training',
+            target_size=(128, 128),
+            batch_size=32,
+            class_mode='categorical'
+        )
 
-    # De validatie data word aangemaakt. De instellingen zijn verder zoals bij de training data.
-    validation_set = train_val_datagen.flow_from_directory(
-        'datasets/training_set',     
-        subset='validation',     
-        target_size=(128, 128),    
-        batch_size=32,           
-        class_mode='categorical'
-    )
+        validation_set = train_val_datagen.flow_from_directory(
+            'datasets/training_set',
+            subset='validation',
+            target_size=(128, 128),
+            batch_size=32,
+            class_mode='categorical'
+        )
 
-    # De test data word aangemaakt. De instellingen zijn verder zoals bij de training data.
-    test_set = test_datagen.flow_from_directory(
-        'datasets/testing_set',      
-        target_size=(128, 128),    
-        batch_size=32,           
-        class_mode='categorical' 
-    )
-    # Create and train the model
-    model = create_model()
-    history = train_model(model, training_set, validation_set, epochs=45)
+        test_set = test_datagen.flow_from_directory(
+            'datasets/testing_set',
+            target_size=(128, 128),
+            batch_size=32,
+            class_mode='categorical'
+        )
 
-    # Display training curves
-    display_training_curves(history)
+        # Create and train the model
+        model = create_model()
+        history = train_model(model, training_set, validation_set, epochs=45)
 
-    # Evaluate the model using a confusion matrix
-    evaluate_model(model, test_set, categories)
+        # Display training curves
+        display_training_curves(history)
+
+        # Evaluate the model using a confusion matrix
+        evaluate_model(model, test_set, categories)
 
     # Make predictions on a single image
     img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
