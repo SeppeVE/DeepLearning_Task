@@ -22,7 +22,7 @@ def create_model():
         layers.RandomFlip("horizontal"),
         layers.RandomTranslation(HEIGHT_FACTOR, WIDTH_FACTOR),
         layers.RandomZoom(0.2),
-        layers.Conv2D(64, (5, 5), input_shape=(128, 128, 3), activation="relu"),
+        layers.Conv2D(48, (5, 5), input_shape=(96, 96, 3), activation="relu"),
         layers.MaxPooling2D((2, 2)),
         layers.Dropout(0.2),
         layers.Conv2D(32, (3, 3), activation="relu"),
@@ -116,7 +116,7 @@ def main():
         training_set = train_val_datagen.flow_from_directory(
             'datasets/training_set',
             subset='training',
-            target_size=(128, 128),
+            target_size=(96, 96),
             batch_size=32,
             class_mode='categorical'
         )
@@ -124,21 +124,21 @@ def main():
         validation_set = train_val_datagen.flow_from_directory(
             'datasets/training_set',
             subset='validation',
-            target_size=(128, 128),
+            target_size=(96, 96),
             batch_size=32,
             class_mode='categorical'
         )
 
         test_set = test_datagen.flow_from_directory(
             'datasets/testing_set',
-            target_size=(128, 128),
+            target_size=(96, 96),
             batch_size=32,
             class_mode='categorical'
         )
 
         # Create and train the model
         model = create_model()
-        history = train_model(model, training_set, validation_set, epochs=45)
+        history = train_model(model, training_set, validation_set, epochs=40)
 
         # Display training curves
         display_training_curves(history)
