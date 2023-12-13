@@ -12,6 +12,10 @@ from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 
 # Function to create and compile the model
 def create_model():
+    NUM_CLASSES = 5 # We hebben natuurlijk 5 classes
+    IMG_SIZE = 128 # De foto's zijn 128 op 128 pixels
+    HEIGHT_FACTOR = 0.2 # Maximale afwijking van de data augmentatie
+    WIDTH_FACTOR = 0.2
     model = tf.keras.Sequential([
         layers.Resizing(IMG_SIZE, IMG_SIZE),
         layers.Rescaling(1./255),
@@ -94,6 +98,8 @@ def main():
     # Load and preprocess data
     # ...
     categories = ['Atomium', 'Coloseum', 'Eiffel Tower', 'Statue of Liberty', 'Sydney Opera House']
+
+    
 
     train_val_datagen = ImageDataGenerator(
             validation_split=0.2,     # De training data wordt voor 80% gebruikt om te trainen en 20% om te valideren.
