@@ -1,5 +1,6 @@
-import numpy as np
+import streamlit as st
 import matplotlib.pyplot as plt
+import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -8,7 +9,6 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.utils import image_dataset_from_directory
 from tensorflow.keras.preprocessing import image
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
-import streamlit as st
 
 # Function to create and compile the model
 def create_model():
