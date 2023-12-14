@@ -67,8 +67,11 @@ def display_training_curves(history):
 def evaluate_model(model, test_set, categories):
     true_labels = []
     predicted_labels = []
+    steps = len(test_set)
 
-    for i, (x_batch, y_batch) in enumerate(test_set):
+    for i in range(steps):
+        #De namen moeten ook x_batch en y_batch zijn of het werkt niet
+        x_batch, y_batch = test_set[i]
         true_labels.extend(np.argmax(y_batch, axis=1))
         predicted_labels.extend(np.argmax(model.predict(x_batch), axis=1))
 
