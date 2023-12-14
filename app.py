@@ -103,6 +103,8 @@ def main():
     # ...
     categories = ['Atomium', 'Coloseum', 'Eiffel Tower', 'Statue of Liberty', 'Sydney Opera House']
 
+    model = None
+
     # Add a button to trigger model training
     train_button = st.button("Train Model")
 
