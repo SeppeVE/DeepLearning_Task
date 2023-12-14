@@ -83,11 +83,6 @@ def evaluate_model(model, test_set, categories):
     plt.title('Confusion Matrix')
     st.pyplot()
 
-    # Make predictions on a single image
-    img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
-    if img_path is not None:
-        predict_single_image(model, img_path, categories)
-
 # Function to make predictions on a single image
 def predict_single_image(model, img_path, categories):
     img = image.load_img(img_path, target_size=(128, 128))
@@ -147,7 +142,7 @@ def main():
 
         # Create and train the model
         model = create_model()
-        history = train_model(model, training_set, validation_set, epochs=10)
+        history = train_model(model, training_set, validation_set, epochs=40)
 
         # Display training curves
         display_training_curves(history)
@@ -155,7 +150,10 @@ def main():
         # Evaluate the model using a confusion matrix
         evaluate_model(model, test_set, categories)
 
-    
+    # Make predictions on a single image
+    img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
+    if img_path is not None:
+        predict_single_image(model, img_path, categories)
 
 if __name__ == "__main__":
     main()
