@@ -147,7 +147,7 @@ def main():
 
         # Create and train the model
         model = create_model()
-        history = train_model(model, training_set, validation_set, epochs=40)
+        history = train_model(model, training_set, validation_set, epochs=10)
 
         # Display training curves
         display_training_curves(history)
