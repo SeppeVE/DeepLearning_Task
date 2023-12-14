@@ -44,6 +44,7 @@ def train_model(model, training_set, validation_set, epochs):
 
 # Function to display training and validation curves
 def display_training_curves(history):
+    st.set_option('deprecation.showPyplotGlobalUse', False)
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
     ax1.plot(history.history['loss'], label='training loss')
@@ -81,6 +82,11 @@ def evaluate_model(model, test_set, categories):
     plot.plot(cmap='Greens')
     plt.title('Confusion Matrix')
     st.pyplot()
+
+    # Make predictions on a single image
+    img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
+    if img_path is not None:
+        predict_single_image(model, img_path, categories)
 
 # Function to make predictions on a single image
 def predict_single_image(model, img_path, categories):
@@ -149,10 +155,7 @@ def main():
         # Evaluate the model using a confusion matrix
         evaluate_model(model, test_set, categories)
 
-    # Make predictions on a single image
-    img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
-    if img_path is not None:
-        predict_single_image(model, img_path, categories)
+    
 
 if __name__ == "__main__":
     main()
