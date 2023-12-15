@@ -50,6 +50,12 @@ def predict_single_image(model, img_path, categories):
 
     st.image(img, caption=f"Predicted category: {predicted_category}")
 
+import streamlit as st
+
+# Initialize session state
+if 'model_loaded' not in st.session_state:
+    st.session_state.model_loaded = False
+
 def main():
     st.title("Monument Classifier App")
     categories = ['Atomium', 'Colosseum', 'Eiffel Tower', 'Statue of Liberty', 'Sydney Opera House']
@@ -58,7 +64,6 @@ def main():
     model = None
 
     if show_training_results:
-
         test_datagen = ImageDataGenerator(rescale=1./255)
 
         test_set = test_datagen.flow_from_directory(
@@ -72,8 +77,11 @@ def main():
         model = load_custom_model()
         evaluate_model(model, test_set, categories)
 
+        # Update session state to indicate that the model is loaded
+        st.session_state.model_loaded = True
+
     # Check if the model is loaded before allowing image upload
-    if model is not None:
+    if st.session_state.model_loaded:
         # Make predictions on a single image
         img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
         if img_path is not None:
