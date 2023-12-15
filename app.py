@@ -131,7 +131,7 @@ def main():
         # Create and train the model
         model = load_custom_model()
         # Display training curves
-        display_training_curves(model)
+        display_training_curves(model, training_set, validation_set)
 
         # Evaluate the model using a confusion matrix
         evaluate_model(model, test_set, categories)
