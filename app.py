@@ -15,7 +15,7 @@ from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 @st.cache_resource
 def load_model():
     # Load the pre-trained model
-    model = load_model("saved_models/monuments.tf")
+     model = keras.models.load_model("saved_models/monuments.tf")
     return model
 
 # Function to display training and validation curves
