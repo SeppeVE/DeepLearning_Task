@@ -54,7 +54,7 @@ def main():
     st.title("Monument Classifier App")
     categories = ['Atomium', 'Colosseum', 'Eiffel Tower', 'Statue of Liberty', 'Sydney Opera House']
 
-    show_training_results = st.checkbox("Show Training Results")
+    show_training_results = st.button("Show Training Results")
     model = None
 
     if show_training_results:
@@ -68,7 +68,7 @@ def main():
             class_mode='categorical'
         )
 
-        # Create and train the model only if the checkbox is selected
+        # Create and train the model only if the button is clicked
         model = load_custom_model()
         evaluate_model(model, test_set, categories)
 
@@ -79,7 +79,7 @@ def main():
         if img_path is not None:
             predict_single_image(model, img_path, categories)
     else:
-        st.warning("Please check 'Show Training Results' to load or train the model before uploading an image for prediction.")
+        st.warning("Please click 'Show Training Results' to load or train the model before uploading an image for prediction.")
 
 if __name__ == "__main__":
     main()
