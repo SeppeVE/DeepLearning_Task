@@ -37,10 +37,12 @@ def create_model():
 
     return model
 
-# Function to train the model
-def train_model(model, training_set, validation_set, epochs):
-    history = model.fit(training_set, validation_data=validation_set, epochs=epochs)
-    return history
+# Function to load the model
+@st.cache_resource
+def load_model():
+    # Load the pre-trained model
+    model = load_model("saved_models/monuments.tf")
+    return model
 
 # Function to display training and validation curves
 def display_training_curves(history):
@@ -144,7 +146,7 @@ def main():
 
         # Create and train the model
         model = create_model()
-        history = train_model(model, training_set, validation_set, epochs=40)
+        history = load_model()
 
         # Display training curves
         display_training_curves(history)
