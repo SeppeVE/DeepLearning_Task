@@ -16,7 +16,6 @@ from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 def load_custom_model():
     # Load the pre-trained model
     model = keras.models.load_model("saved_models/monuments.tf")
-    evaluate_model()
     return model
 
 
@@ -65,8 +64,29 @@ def main():
     train_button = st.button("Train Model")
 
     if train_button:
+        train_val_datagen = ImageDataGenerator(
+            validation_split=0.2,
+            rescale=1./255,
+            shear_range=0.2,
+            zoom_range=0.2,
+            horizontal_flip=True,
+        )
+
+        test_datagen = ImageDataGenerator(rescale=1./255)
+
+
+        test_set = test_datagen.flow_from_directory(
+            'datasets/testing_set',
+            target_size=(96, 96),
+            batch_size=32,
+            class_mode='categorical'
+        )
+
         # Create and train the model
         model = load_custom_model()
+
+        # Evaluate the model using a confusion matrix
+        evaluate_model(model, test_set, categories)
 
     # Make predictions on a single image
     img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
