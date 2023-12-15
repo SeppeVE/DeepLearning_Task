@@ -10,32 +10,6 @@ from keras.utils import image_dataset_from_directory
 from tensorflow.keras.preprocessing import image
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 
-# Function to create and compile the model
-def create_model():
-    NUM_CLASSES = 5  # We hebben natuurlijk 5 classes
-    IMG_SIZE = 128  # De foto's zijn 128 op 128 pixels
-    HEIGHT_FACTOR = 0.2  # Maximale afwijking van de data augmentatie
-    WIDTH_FACTOR = 0.2
-    model = tf.keras.Sequential([
-        layers.Resizing(IMG_SIZE, IMG_SIZE),
-        layers.Rescaling(1./255),
-        layers.RandomFlip("horizontal"),
-        layers.RandomTranslation(HEIGHT_FACTOR, WIDTH_FACTOR),
-        layers.RandomZoom(0.2),
-        layers.Conv2D(48, (5, 5), input_shape=(96, 96, 3), activation="relu"),
-        layers.MaxPooling2D((2, 2)),
-        layers.Dropout(0.2),
-        layers.Conv2D(32, (3, 3), activation="relu"),
-        layers.MaxPooling2D((2, 2)),
-        layers.Dropout(0.2),
-        layers.Flatten(),
-        layers.Dense(128, activation="relu"),
-        layers.Dense(NUM_CLASSES, activation="softmax")
-    ])
-
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.001), loss='binary_crossentropy', metrics=['accuracy'])
-
-    return model
 
 # Function to load the model
 @st.cache_resource
@@ -145,11 +119,9 @@ def main():
         )
 
         # Create and train the model
-        model = create_model()
-        history = load_model()
-
+        model = load_model()
         # Display training curves
-        display_training_curves(history)
+        display_training_curves(model)
 
         # Evaluate the model using a confusion matrix
         evaluate_model(model, test_set, categories)
