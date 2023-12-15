@@ -50,20 +50,22 @@ def predict_single_image(model, img_path, categories):
 
     st.image(img, caption=f"Predicted category: {predicted_category}")
 
-import streamlit as st
-
-# Initialize session state
-if 'model_loaded' not in st.session_state:
-    st.session_state.model_loaded = False
-
 def main():
     st.title("Monument Classifier App")
+    st.text("In deze applicatie zult u er voor kunnen kiezen om een AI model te kunnen testen. Waarop? Verschillende monumenten van over de wereld. Het model is getrained om te zeggen naar welk monument het kijkt. Natuurlijk kunnen niet alle monumenten er inzitten dus hebt u de keuze tussen 5 opties.")
+    st.text("Atomium")
+    st.text("Colosseum")
+    st.text("Eiffeltoren")
+    st.text("Statue of Liberty")
+    st.text("Sydney Opera House")
+    st.text("Volg de onderstaande stappen om de AI uit te dagen.")
     categories = ['Atomium', 'Colosseum', 'Eiffel Tower', 'Statue of Liberty', 'Sydney Opera House']
 
-    show_training_results = st.button("Show Training Results")
+    show_training_results = st.checkbox("Show Training Results")
     model = None
 
     if show_training_results:
+
         test_datagen = ImageDataGenerator(rescale=1./255)
 
         test_set = test_datagen.flow_from_directory(
@@ -73,21 +75,18 @@ def main():
             class_mode='categorical'
         )
 
-        # Create and train the model only if the button is clicked
+        # Create and train the model only if the checkbox is selected
         model = load_custom_model()
         evaluate_model(model, test_set, categories)
 
-        # Update session state to indicate that the model is loaded
-        st.session_state.model_loaded = True
-
     # Check if the model is loaded before allowing image upload
-    if st.session_state.model_loaded:
+    if model is not None:
         # Make predictions on a single image
         img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
         if img_path is not None:
             predict_single_image(model, img_path, categories)
     else:
-        st.warning("Please click 'Show Training Results' to load or train the model before uploading an image for prediction.")
+        st.warning("Als u de checkbox aanvinkt zal het model geladen worden. Hierna zult u de optie krijgen om een foto van een van de monumenten te uploaden waarop een output geprint zal worden met de foto en wat het model denkt dat het monument is.")
 
 if __name__ == "__main__":
     main()
