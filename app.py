@@ -10,7 +10,7 @@ from keras.utils import image_dataset_from_directory
 from tensorflow.keras.preprocessing import image
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 
-
+st.set_option('deprecation.showPyplotGlobalUse', False)
 # Function to load the model
 @st.cache_resource
 def load_custom_model():
@@ -53,10 +53,7 @@ def predict_single_image(model, img_path, categories):
 # Streamlit app
 def main():
     st.title("Monument Classifier App")
-
-    # Load and preprocess data
-    # ...
-    categories = ['Atomium', 'Coloseum', 'Eiffel Tower', 'Statue of Liberty', 'Sydney Opera House']
+    categories = ['Atomium', 'Colosseum', 'Eiffel Tower', 'Statue of Liberty', 'Sydney Opera House']
 
     model = None
 
@@ -64,16 +61,8 @@ def main():
     train_button = st.button("Train Model")
 
     if train_button:
-        train_val_datagen = ImageDataGenerator(
-            validation_split=0.2,
-            rescale=1./255,
-            shear_range=0.2,
-            zoom_range=0.2,
-            horizontal_flip=True,
-        )
 
         test_datagen = ImageDataGenerator(rescale=1./255)
-
 
         test_set = test_datagen.flow_from_directory(
             'datasets/testing_set',
@@ -88,9 +77,9 @@ def main():
         # Evaluate the model using a confusion matrix
         evaluate_model(model, test_set, categories)
 
-    # Make predictions on a single image
+    # Make predictions on a single image only if the model is available
     img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
-    if img_path is not None:
+    if model is not None and img_path is not None:
         predict_single_image(model, img_path, categories)
 
 if __name__ == "__main__":
