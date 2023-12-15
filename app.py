@@ -19,8 +19,17 @@ def load_custom_model():
     return model
 
 # Function to display training and validation curves
-def display_training_curves(history):
+# Function to display training and validation curves
+def display_training_curves(model, training_set, validation_set):
     st.set_option('deprecation.showPyplotGlobalUse', False)
+
+    # Modify this part to capture the history during training
+    history = model.fit(
+        training_set,
+        epochs=45,  # Add the number of epochs you want
+        validation_data=validation_set
+    )
+
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
     ax1.plot(history.history['loss'], label='training loss')
@@ -39,6 +48,7 @@ def display_training_curves(history):
 
     fig.tight_layout()
     st.pyplot(fig)
+
 
 # Function to evaluate the model using a confusion matrix
 def evaluate_model(model, test_set, categories):
