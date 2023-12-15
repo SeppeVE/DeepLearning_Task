@@ -16,38 +16,8 @@ from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 def load_custom_model():
     # Load the pre-trained model
     model = keras.models.load_model("saved_models/monuments.tf")
+    evaluate_model()
     return model
-
-# Function to display training and validation curves
-# Function to display training and validation curves
-def display_training_curves(model, training_set, validation_set):
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-
-    # Modify this part to capture the history during training
-    history = model.fit(
-        training_set,
-        epochs=45,  # Add the number of epochs you want
-        validation_data=validation_set
-    )
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
-
-    ax1.plot(history.history['loss'], label='training loss')
-    ax1.plot(history.history['val_loss'], label='validation loss')
-    ax1.set_title('Loss curves')
-    ax1.set_xlabel('Epoch')
-    ax1.set_ylabel('Loss')
-    ax1.legend()
-
-    ax2.plot(history.history['accuracy'], label='training accuracy')
-    ax2.plot(history.history['val_accuracy'], label='validation accuracy')
-    ax2.set_title('Accuracy curves')
-    ax2.set_xlabel('Epoch')
-    ax2.set_ylabel('Accuracy')
-    ax2.legend()
-
-    fig.tight_layout()
-    st.pyplot(fig)
 
 
 # Function to evaluate the model using a confusion matrix
