@@ -50,17 +50,14 @@ def predict_single_image(model, img_path, categories):
 
     st.image(img, caption=f"Predicted category: {predicted_category}")
 
-# Streamlit app
 def main():
     st.title("Monument Classifier App")
     categories = ['Atomium', 'Colosseum', 'Eiffel Tower', 'Statue of Liberty', 'Sydney Opera House']
 
+    show_training_results = st.checkbox("Show Training Results")
     model = None
 
-    # Add a button to trigger model training
-    train_button = st.button("Train Model")
-
-    if train_button:
+    if show_training_results:
 
         test_datagen = ImageDataGenerator(rescale=1./255)
 
@@ -71,16 +68,18 @@ def main():
             class_mode='categorical'
         )
 
-        # Create and train the model
+        # Create and train the model only if the checkbox is selected
         model = load_custom_model()
-
-        # Evaluate the model using a confusion matrix
         evaluate_model(model, test_set, categories)
 
-    # Make predictions on a single image only if the model is available
-    img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
-    if model is not None and img_path is not None:
-        predict_single_image(model, img_path, categories)
+    # Check if the model is loaded before allowing image upload
+    if model is not None:
+        # Make predictions on a single image
+        img_path = st.file_uploader("Upload an image for prediction", type=["jpg", "jpeg", "png"])
+        if img_path is not None:
+            predict_single_image(model, img_path, categories)
+    else:
+        st.warning("Please check 'Show Training Results' to load or train the model before uploading an image for prediction.")
 
 if __name__ == "__main__":
     main()
